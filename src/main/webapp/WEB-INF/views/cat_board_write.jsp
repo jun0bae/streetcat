@@ -7,6 +7,17 @@
         document.getElementById("pname").value = name;
         document.getElementById("pfeature").value = feature;
   }
+    var num = 2;
+    function addFile(){
+    	if(num>5){
+    		alert("파일은 5개 이하만 가능합니다");
+    		return;
+    	}
+    	var input = '<br><input type="file" name="image'+num+'">';
+    	num++;
+    	var fileContainer = document.getElementById('file_container');
+    	fileContainer.innerHTML += input;
+    	}
    </script>
 <h3 align="center">게 시 글 작 성</h3>
 <div align="center">
@@ -25,7 +36,7 @@
  </tr>
  <tr>
  <td>작성자</td>
- <td><input type="text" value="${sessionScope.name}"></td>
+ <td><input type="text" name="writer" value="${sessionScope.name}"></td>
  </tr>
  <tr>
  <td>제목</td>
@@ -33,11 +44,12 @@
  </tr>
  <tr>
  <td>파일</td>
- <td><input type="file" name="image1"><br>
- <input type="file" name="image2"><br>
- <input type="file" name="image3"><br>
- <input type="file" name="image4"><br>
- <input type="file" name="image5"></td>
+ <td>
+ <div id="file_container">
+ <input type="file" name="image1">
+ </div>
+ <button type="button" onclick="addFile()">+</button>
+ <br>
  </tr>
  <tr>
  <td>내용</td>

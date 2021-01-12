@@ -2,6 +2,7 @@ package com.ezen709.streetcat;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -99,39 +100,77 @@ public class CatBoardController {
 	@RequestMapping(value="/cat_board_write_ok.do")
 	public String catBoardWriteOk(HttpServletRequest req, @ModelAttribute CatBoardDTO dto, BindingResult result) {
 		int filesize=0;
-		MultipartHttpServletRequest mr = (MultipartHttpServletRequest)req;
+		String filename ;
 		
+		MultipartHttpServletRequest mr = (MultipartHttpServletRequest)req;
 		MultipartFile file1 = mr.getFile("image1");
 		MultipartFile file2 = mr.getFile("image2");
 		MultipartFile file3 = mr.getFile("image3");
 		MultipartFile file4 = mr.getFile("image4");
 		MultipartFile file5 = mr.getFile("image5");
-		String filename1=file1.getOriginalFilename();
-		String filename2=file2.getOriginalFilename();
-		String filename3=file3.getOriginalFilename();
-		String filename4=file4.getOriginalFilename();
-		String filename5=file5.getOriginalFilename();
-		File target = new File(uploadPath,file1.getOriginalFilename());
-		if(file1.getSize() > 0) {
+		
+		if(file1!=null) {
+			File target1 = new File(uploadPath,file1.getOriginalFilename());
+				try {
+					file1.transferTo(target1);
+					filename = file1.getOriginalFilename();
+					filesize = (int)file1.getSize();
+					dto.setImage1(filename);
+				}catch (IOException e) {
+				e.printStackTrace();
+				}
+	    }
+		if(file2!=null) {
+			File target2 = new File(uploadPath,file2.getOriginalFilename());
 			try {
-				file1.transferTo(target);
-				filename1 = file1.getOriginalFilename();
-				filesize = (int)file1.getSize();
+				file2.transferTo(target2);
+				filename = file2.getOriginalFilename();
+				filesize = (int)file2.getSize();
+				dto.setImage2(filename);
 			}catch (IOException e) {
 			e.printStackTrace();
 			}
-		}
+    }
+		if(file3!=null) {
+			File target3 = new File(uploadPath,file3.getOriginalFilename());
+			try {
+				file3.transferTo(target3);
+				filename = file3.getOriginalFilename();
+				filesize = (int)file3.getSize();
+				dto.setImage3(filename);
+			}catch (IOException e) {
+			e.printStackTrace();
+			}
+    }
+		if(file4!=null) {
+			File target4 = new File(uploadPath,file4.getOriginalFilename());
+			try {
+				file4.transferTo(target4);
+				filename = file4.getOriginalFilename();
+				filesize = (int)file4.getSize();
+				dto.setImage4(filename);
+			}catch (IOException e) {
+			e.printStackTrace();
+			}
+    }
+		if(file5!=null) {
+			File target5 = new File(uploadPath,file5.getOriginalFilename());
+			try {
+				file5.transferTo(target5);
+				filename = file5.getOriginalFilename();
+				filesize = (int)file5.getSize();
+				dto.setImage5(filename);
+			}catch (IOException e) {
+			e.printStackTrace();
+			}
+    }
+
 		String msg = null;
 		String url = null;
 		if(mr.getParameter("cnum").equals("")) {
 			dto.setCnum(0);	
 		}else {
 		dto.setCnum(Integer.parseInt(mr.getParameter("cnum")));}
-		dto.setImage1(filename1);
-		dto.setImage2(filename2);
-		dto.setImage3(filename3);
-		dto.setImage4(filename4);
-		dto.setImage5(filename5);
 		dto.setIp(req.getRemoteAddr());
 		int res = catBoardMapper.insertBoard(dto);
 		if(res>0) {
@@ -271,10 +310,10 @@ public class CatBoardController {
 		int res =catBoardMapper.boardDelete(bnum);
 		if(res>0) {
 		    msg = "글삭제 성공 게시판페이지로 이동합니다";
-			url = "cat_board_content.do?bnum="+bnum;
+			url = "cat_board.do";
 		}else {
 			msg = "글삭제 실패 게시판페이지로 이동합니다";
-			url = "cat_board_content.do?bnum="+bnum;
+			url = "cat_board.do";
 		}
 		req.setAttribute("msg", msg);
 		req.setAttribute("url", url);

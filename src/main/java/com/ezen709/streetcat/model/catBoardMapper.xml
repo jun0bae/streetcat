@@ -13,7 +13,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<insert id="cat_insertBoard" parameterType="CatBoardDTO">
 	  insert into cat_board values (seq_bnum.nextval,
 			#{writer}, #{subject}, #{content},sysdate,0, 0,
-			#{image1},#{image2},#{image3},#{image4},#{image5},#{location}, #{name}, #{feature},#{type},0,0)
+			#{image1,jdbcType=VARCHAR},#{image2,jdbcType=VARCHAR},#{image3,jdbcType=VARCHAR},#{image4,jdbcType=VARCHAR},#{image5,jdbcType=VARCHAR},#{location}, #{name}, #{feature},#{type},0,0)
 	</insert>
 	<select id="cat_list"  resultType="CatDTO" parameterType="java.util.Map">
 		select * from cat where location = #{location}

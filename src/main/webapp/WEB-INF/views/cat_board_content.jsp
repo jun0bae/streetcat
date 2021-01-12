@@ -11,19 +11,18 @@
   <script>
     $('.carousel').carousel({
           interval: 2000 //기본 5초 })
-  </script>
-<script>
+   </script>
+   <script>
      function isLogin(){
     	 <% if(session.getAttribute("name")==null){%>
     	 alert("로그인 후 이용해주세요")
     	 location.href("cat_board.do")
     	 <%}%>
      }
-     function goBack(){
-    	 alert("처음/마지막글 입니다")
-    	 window.history.back()
-     }
-     
+     <% if(request.getAttribute("getBoard")==null){%>
+     alert("처음/마지막글 입니다")
+	 window.history.back()
+	 <%}%>
     </script>
     
 <c:if test="${getBoard.writer==sessionScope.name}">
@@ -35,9 +34,8 @@
 
 <html>
 
-<c:if test="${getBoard.bnum==null}">
-<body onload="goBack()">
-</c:if>
+
+<body>
 <table width="100%">
 
 <tr>
@@ -70,13 +68,13 @@ ${getBoard.subject}
       <div class="carousel-item"> <img class="d-block w-100" src="${upPath}/${getBoard.image2}" alt="2nd slide"> </div>
       </c:if>
       <c:if test="${getBoard.image3!=null}">
-      <div class="carousel-item"> <img class="d-block w-100" src="${upPath}/${getBoard.image3}" alt="2nd slide"> </div>
+      <div class="carousel-item"> <img class="d-block w-100" src="${upPath}/${getBoard.image3}" alt="3nd slide"> </div>
       </c:if> 
       <c:if test="${getBoard.image4!=null}">
-      <div class="carousel-item"> <img class="d-block w-100" src="${upPath}/${getBoard.image4}" alt="2nd slide"> </div>
+      <div class="carousel-item"> <img class="d-block w-100" src="${upPath}/${getBoard.image4}" alt="4nd slide"> </div>
       </c:if>
       <c:if test="${getBoard.image5!=null}">
-      <div class="carousel-item"> <img class="d-block w-100" src="${upPath}/${getBoard.image5}" alt="2nd slide"> </div>
+      <div class="carousel-item"> <img class="d-block w-100" src="${upPath}/${getBoard.image5}" alt="5nd slide"> </div>
       </c:if>
       <!-- / 슬라이드 쇼 끝 -->
       <!-- 왼쪽 오른쪽 화살표 버튼 --> <a class="carousel-control-prev" href="#demo" data-slide="prev"> <span class="carousel-control-prev-icon" aria-hidden="true"></span> <!-- <span>Previous</span> --> </a> <a class="carousel-control-next" href="#demo"
