@@ -7,7 +7,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from (select rownum rn, A.* from (select * from cat_board order by bnum desc)A)
 		where rn between #{start} and #{end}
 	</select>
-	<select id="getCount" resultType="Integer">
+	<select id="find_cat_listBoard" resultType="CatBoardDTO" parameterType="FindCatBoardDTO">
+	select * from (select rownum rn, A.* from (select * from cat_board where
+	 <choose>
+	  <when test="type=='subject'">
+	  subject like '%'||#{searchString}||'%'
+	  </when>
+	  <when test="type=='content'">
+	  content like '%'||#{searchString}||'%'
+	  </when> 
+	  <when test="type=='writer'">
+	  writer like #{searchString}
+	  </when> 
+	  </choose>
+	  order by bnum desc)A)
+		where rn between #{start} and #{end}
+	</select>
+	<select id="findGetCount" resultType="int" parameterType="FindCatBoardDTO">
+	select count(*) from cat_board where #{type} like '%'||#{searchString}||'%'
+	</select>
+	<select id="getCount" resultType="int">
 		select count(*) from cat_board
 	</select>
 	<insert id="cat_insertBoard" parameterType="CatBoardDTO">
@@ -18,10 +37,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="cat_list"  resultType="CatDTO" parameterType="java.util.Map">
 		select * from cat where location = #{location}
 	</select>
-	<select id="getCat"  resultType="CatDTO" parameterType="Integer">
+	<select id="getCat"  resultType="CatDTO" parameterType="int">
 		select * from cat where cnum = #{cnum}
 	</select>
-	<select id="getBoard"  resultType="CatBoardDTO" parameterType="Integer">
+	<select id="getBoard"  resultType="CatBoardDTO" parameterType="int">
 		select * from cat_board where bnum = #{bnum}
 	</select>
 	<insert id="cat_insertComment" parameterType="CatBoardCommentDTO">
@@ -30,37 +49,40 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="cat_boardComment" resultType="CatBoardCommentDTO" parameterType="java.util.Map">
 	  select * from (select rownum rn, A.* from (select * from cat_board_comment order by re_step asc)A) where rn between #{start} and #{end} and bnum = #{bnum}
 	</select>
-	<select id="getComment"  resultType="CatBoardCommentDTO" parameterType="Integer">
+	<select id="getComment"  resultType="CatBoardCommentDTO" parameterType="int">
 		select * from cat_board_comment where comment_num = #{num}
 	</select>
 	<update id="plusRe_step" parameterType="java.util.Map">
 		${sql}
 	</update>
-    <select id="getCommentCount" resultType="Integer">
+    <select id="getCommentCount" resultType="int">
 		select count(*) from cat_board_comment where bnum = #{bnum}
 	</select>
 	<update id="updateCommentCount" parameterType="java.util.Map">
 	    update cat_board set commentcount = #{count} where bnum = #{bnum}
 	</update>
+	<select id="likeList" parameterType="int" resultType="CatBoardLikeDTO">
+	 select * from cat_board_ulike where bnum =#{bnum}
+	</select>
 	<insert id="boardLike" parameterType="CatBoardLikeDTO">
 	  insert into cat_board_ulike values(#{bnum},#{id})
 	</insert>
-	<delete id="boardUnLike" parameterType="Integer">
-          delete from cat_board_like where bnum = #{bnum}
+	<delete id="boardUnLike" parameterType="int">
+          delete from cat_board_ulike where bnum = #{bnum}
     </delete>
-    <delete id="boardCommentDelete" parameterType="Integer">
+    <delete id="boardCommentDelete" parameterType="int">
      delete from cat_board_comment where bnum = #{bnum}
     </delete>
-    <delete id="boardDelete" parameterType="Integer">
+    <delete id="boardDelete" parameterType="int">
      delete from cat_board where bnum = #{bnum}
     </delete>
     <update id="boardEdit" parameterType="CatBoardDTO">
      update cat_board set subject = #{subject} content = #{content} location = #{location} name = #{name} feature = #{feature} where bnum = #{bnum}
     </update>
-    <select id="nextBoard" parameterType="Integer" resultType="Integer">
+    <select id="nextBoard" parameterType="int" resultType="int">
      select min(bnum) bnum from cat_board where <![CDATA[bnum > #{bnum}]]>
     </select>
-    <select id="beforeBoard" parameterType="Integer" resultType="Integer">
+    <select id="beforeBoard" parameterType="int" resultType="int">
      select max(bnum) bnum from cat_board where <![CDATA[bnum < #{bnum}]]>
     </select>
 </mapper>

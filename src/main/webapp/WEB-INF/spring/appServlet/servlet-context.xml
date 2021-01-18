@@ -23,13 +23,12 @@
 	
 	<context:component-scan base-package="com.ezen709.streetcat" />
 	
-	<beans:bean id="multipartResolver"
-	       class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-	<beans:property name="maxUploadSize" value="10485760"/>            
-	</beans:bean>
-	<beans:bean id="uploadPath" class="java.lang.String">
-	 <beans:constructor-arg value="d:\\springFile"/>
-	</beans:bean>
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+   <beans:property name="maxUploadSize" value="10485760" />
+</beans:bean>
 	
+	<beans:bean id="uploadPath" class="java.lang.String">
+		<beans:constructor-arg value="d:\\springFile"/>
+	</beans:bean>
 	
 </beans:beans>
